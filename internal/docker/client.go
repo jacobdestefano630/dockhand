@@ -7,18 +7,17 @@ import (
 	"github.com/docker/docker/client"
 )
 
-
 type Client struct {
 	cli *client.Client
 }
 
 func New(host string) (*Client, error) {
 	opts := []client.Opt{
-		client.FormEnv,
+		client.FromEnv, // <-- typo fixed (FromEnv)
 		client.WithAPIVersionNegotiation(),
 	}
 	if host != "" {
-		opt = append(opts, client.WithHost(host)) // e.g. "unix:///var/run/docker.sock"
+		opts = append(opts, client.WithHost(host)) // <-- opts (not opt)
 	}
 	cli, err := client.NewClientWithOpts(opts...)
 	if err != nil {
@@ -29,6 +28,4 @@ func New(host string) (*Client, error) {
 
 func (c *Client) ListContainers(ctx context.Context, all bool) ([]types.Container, error) {
 	return c.cli.ContainerList(ctx, types.ContainerListOptions{All: all})
-}
-	}
 }
