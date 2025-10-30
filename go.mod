@@ -1,1 +1,7 @@
-module github.com/
+module github.com/jacobdestefano630/dockhand
+
+go 1.22
+
+require (
+	github.com/docker/docker v27.1.1+incompatible
+)

@@ -1,0 +1,21 @@
+{{define "logs"}}
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Logs</title>
+    <style>
+        pre{white-space:pre-wrap;background:#111;color:#ddd;padding:10px;border-radius:8px;height:70vh;overflow:auto}
+        button{margin:8px 0}
+    </style>
+</head><body>
+<h2>Logs for {{.ID}}</h2>
+<button id="start">Start Stream</button>
+<pre id="out"></pre>
+<script>
+    const out = document.getElementById('out');
+    document.getElementById('start').onclick = () => {
+        const es = new EventSource('/logs/stream/{{.ID}}');
+        es.onmessage = (ev) => { out.textContent += ev.data + "\n"; out.scrollTop = out.scrollHeight; }
+        es.onerror = () => { es.close(); }
+    };
+</script>
+</body></html>
+{{end}}
