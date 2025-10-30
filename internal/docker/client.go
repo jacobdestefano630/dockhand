@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/docker/docker/api/types"
+	container "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 )
 
@@ -13,11 +14,11 @@ type Client struct {
 
 func New(host string) (*Client, error) {
 	opts := []client.Opt{
-		client.FromEnv, // <-- typo fixed (FromEnv)
+		client.FromEnv,
 		client.WithAPIVersionNegotiation(),
 	}
 	if host != "" {
-		opts = append(opts, client.WithHost(host)) // <-- opts (not opt)
+		opts = append(opts, client.WithHost(host))
 	}
 	cli, err := client.NewClientWithOpts(opts...)
 	if err != nil {
@@ -27,5 +28,6 @@ func New(host string) (*Client, error) {
 }
 
 func (c *Client) ListContainers(ctx context.Context, all bool) ([]types.Container, error) {
-	return c.cli.ContainerList(ctx, types.ContainerListOptions{All: all})
+	// Note: in newer SDKs, this is container.ListOptions (not types.ContainerListOptions)
+	return c.cli.ContainerList(ctx, container.ListOptions{All: all})
 }
