@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	dockerc "github.com/you/dockhand/internal/docker"
-	"github.com/you/dockhand/internal/web"
+	dockerc "dockhand/internal/docker"
+	"dockhand/internal/web"
 )
 
 func main() {

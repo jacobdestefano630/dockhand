@@ -1,4 +1,4 @@
-module github.com/jacobdestefano630/dockhand
+module dockhand
 
 go 1.22
 

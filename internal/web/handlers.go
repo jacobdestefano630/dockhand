@@ -7,13 +7,14 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
+	_ "os"
 	"strings"
-	"time"
+	_ "time"
+
+	dockerc "dockhand/internal/docker"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
-	"github.com/you/dockhand/internal/docker"
 )
 
 type Server struct {
