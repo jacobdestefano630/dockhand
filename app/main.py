@@ -6,7 +6,12 @@ import docker
 from fastapi import FastAPI, Request, Depends, HTTPException, Response
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
+
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel
+
+app = FastAPI(title="DockTiles")
+Instrumentator().instrument(app).expose(app)
 
 TEMPLATES = Jinja2Templates(directory="app/templates")
 
