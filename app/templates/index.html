@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="mb-4 flex items-center gap-3">
+    <a href="/" class="px-3 py-1 rounded bg-slate-800 border border-slate-700">Refresh</a>
+    {% if not allow_actions %}
+    <span class="text-xs text-amber-400">Actions disabled (read-only mode)</span>
+    {% endif %}
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for c in containers %}
+      <a href="/containers/{{ c.name }}" class="group block rounded-2xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 p-4 transition">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="text-lg font-semibold">{{ c.name }}</div>
+            <div class="text-xs text-slate-400 truncate">{{ c.image }}</div>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full {% if c.state == 'running' %}bg-emerald-500/20 text-emerald-300 border border-emerald-500/30{% elif c.state == 'paused' %}bg-amber-500/20 text-amber-300 border border-amber-500/30{% else %}bg-slate-700 text-slate-300 border border-slate-600{% endif %}">
+            {{ c.state }}
+          </span>
+        </div>
+        {% if c.ports %}
+        <div class="mt-3 text-xs text-slate-300">
+          Ports:
+          {% for p in c.ports %}
+            <span class="inline-block mr-2">{{ p.host }}:{{ p.port }}</span>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="mt-3 text-xs text-slate-500">No published ports</div>
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+{% endblock %}

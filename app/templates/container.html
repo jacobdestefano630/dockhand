@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="mb-4">
+    <a href="/" class="text-sm opacity-70 hover:opacity-100">← Back</a>
+  </div>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-800/50 p-5">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 class="text-xl font-semibold">{{ container.name }}</h2>
+        <div class="text-xs text-slate-400">Image: {{ container.image }}</div>
+        <div class="mt-2 text-xs">
+          <span class="px-2 py-1 rounded-full {% if container.state == 'running' %}bg-emerald-500/20 text-emerald-300 border border-emerald-500/30{% elif container.state == 'paused' %}bg-amber-500/20 text-amber-300 border border-amber-500/30{% else %}bg-slate-700 text-slate-300 border border-slate-600{% endif %}">
+            {{ container.state }}
+          </span>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        {% if ui_href %}
+        <a href="{{ ui_href }}" target="_blank" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm">Open UI</a>
+        {% endif %}
+        {% if allow_actions %}
+        <button hx-post="/containers/{{ container.name }}/start" hx-swap="none" class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-sm">Start</button>
+        <button hx-post="/containers/{{ container.name }}/stop" hx-swap="none" class="px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-sm">Stop</button>
+        <button hx-post="/containers/{{ container.name }}/restart" hx-swap="none" class="px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-sm">Restart</button>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h3 class="text-sm font-semibold mb-2">Logs (tail 200)</h3>
+      <pre class="text-xs bg-slate-950/60 p-3 rounded-lg border border-slate-800 overflow-x-auto" hx-get="/containers/{{ container.name }}/logs" hx-trigger="load, every 3s" hx-swap="innerHTML"></pre>
+    </div>
+
+    {% if container.ports %}
+    <div class="mt-5 text-xs text-slate-300">
+      <div class="font-semibold mb-1">Published Ports</div>
+      {% for p in container.ports %}
+        <div>{{ p.host }}:{{ p.port }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}
